@@ -75,11 +75,9 @@ describe("Signing module", function() {
       const privateKey = signing.createPrivateKey();
       publicKey = signing.getPublicKey(privateKey);
       signature = signing.sign(privateKey, message);
-      console.log(signature, 'beforeEach hook')
     });
 
     it("should return a hex string", function() {
-      console.log(signature, 'testsign');
       expect(signature).to.be.a.hexString;
     });
 

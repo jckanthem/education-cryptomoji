@@ -89,40 +89,40 @@ describe('Mining module', function() {
       blockchain.mine(miner);
     });
 
-    // it('should have properties for difficulty and reward', function() {
-    //   expect(blockchain.difficulty).to.exist.and.be.a('number');
-    //   expect(blockchain.reward).to.exist.and.be.a('number');
-    // });
+    it('should have properties for difficulty and reward', function() {
+      expect(blockchain.difficulty).to.exist.and.be.a('number');
+      expect(blockchain.reward).to.exist.and.be.a('number');
+    });
 
-    // it('should be able to mine new blocks', function() {
-    //   expect(blockchain.blocks).to.have.lengthOf(2);
+    it('should be able to mine new blocks', function() {
+      expect(blockchain.blocks).to.have.lengthOf(2);
 
-    //   const head = blockchain.getHeadBlock();
-    //   expect(head.transactions).to.deep.include(transaction);
-    // });
+      const head = blockchain.getHeadBlock();
+      expect(head.transactions).to.deep.include(transaction);
+    });
 
-    // it('should mine blocks with a valid zero-leading hash', function() {
-    //   const head = blockchain.getHeadBlock();
-    //   const zeros = '0'.repeat(blockchain.difficulty);
+    it('should mine blocks with a valid zero-leading hash', function() {
+      const head = blockchain.getHeadBlock();
+      const zeros = '0'.repeat(blockchain.difficulty);
 
-    //   expect(head.hash).to.be.a('string').and.not.be.empty;
-    //   expect(head.hash.slice(0, zeros.length)).to.equal(zeros);
+      expect(head.hash).to.be.a('string').and.not.be.empty;
+      expect(head.hash.slice(0, zeros.length)).to.equal(zeros);
 
-    //   const copy = new MineableBlock(head.transactions, head.previousHash);
-    //   copy.calculateHash(head.nonce);
-    //   expect(copy.hash).to.equal(head.hash);
-    // });
+      const copy = new MineableBlock(head.transactions, head.previousHash);
+      copy.calculateHash(head.nonce);
+      expect(copy.hash).to.equal(head.hash);
+    });
 
-    // it('should include a transaction rewarding the miner', function() {
-    //   const { transactions } = blockchain.getHeadBlock();
-    //   const reward = transactions.find(transaction => {
-    //     return transaction.recipient === signing.getPublicKey(miner);
-    //   });
+    it('should include a transaction rewarding the miner', function() {
+      const { transactions } = blockchain.getHeadBlock();
+      const reward = transactions.find(transaction => {
+        return transaction.recipient === signing.getPublicKey(miner);
+      });
 
-    //   expect(reward).to.not.be.undefined;
-    //   expect(reward.source).to.be.null;
-    //   expect(reward.amount).to.equal(blockchain.reward);
-    // });
+      expect(reward).to.not.be.undefined;
+      expect(reward.source).to.be.null;
+      expect(reward.amount).to.equal(blockchain.reward);
+    });
 
     it('should not add transactions to the chain until mined', function() {
       const originalHead = blockchain.getHeadBlock();
@@ -135,21 +135,21 @@ describe('Mining module', function() {
       expect(originalHead).to.deep.equal(blockchain.getHeadBlock());
     });
 
-    // it('should clear out pending transactions after mining', function() {
-    //   // Add a transaction so we can mine a new block
-    //   blockchain.addTransaction(new MineableTransaction(
-    //     signing.createPrivateKey(),
-    //     signing.getPublicKey(signing.createPrivateKey()),
-    //     Math.ceil(Math.random() * 100)
-    //   ));
-    //   blockchain.mine(miner);
+    it('should clear out pending transactions after mining', function() {
+      // Add a transaction so we can mine a new block
+      blockchain.addTransaction(new MineableTransaction(
+        signing.createPrivateKey(),
+        signing.getPublicKey(signing.createPrivateKey()),
+        Math.ceil(Math.random() * 100)
+      ));
+      blockchain.mine(miner);
 
-    //   const head = blockchain.getHeadBlock();
-    //   expect(head.transactions).to.not.deep.include(transaction);
-    // });
+      const head = blockchain.getHeadBlock();
+      expect(head.transactions).to.not.deep.include(transaction);
+    });
   });
 
-  xdescribe('isValidMineableChain', function() {
+  describe('isValidMineableChain', function() {
     let blockchain = null;
     let reward = null;
     let miner = null;
@@ -171,6 +171,8 @@ describe('Mining module', function() {
     });
 
     it('should return true for a valid blockchain', function() {
+      for(let block of blockchain.blocks){
+      }
       expect(isValidMineableChain(blockchain)).to.be.true;
     });
 
@@ -179,7 +181,6 @@ describe('Mining module', function() {
       const block = new MineableBlock([valid], blockchain.getHeadBlock().hash);
       block.calculateHash(0);
       blockchain.blocks.push(block);
-
       expect(isValidMineableChain(blockchain)).to.be.false;
     });
 
