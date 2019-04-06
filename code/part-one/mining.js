@@ -19,7 +19,16 @@ class MineableTransaction {
    */
   constructor(privateKey, recipient = null, amount) {
     // Enter your solution here
-
+    
+    if(recipient === null){
+      this.source = null;
+      this.recipient = signing.getPublicKey(privateKey);
+    } else{
+      this.source = signing.getPublicKey(privateKey);
+      this.recipient = recipient;
+    }
+    this.amount = amount;
+    this.signature = signing.sign(privateKey, this.source + this.recipient + this.amount);
   }
 }
 
@@ -35,7 +44,9 @@ class MineableBlock extends Block {
    */
   constructor(transactions, previousHash) {
     // Your code here
-
+    super(transactions, previousHash);
+    this.hash = null;
+    this.nonce = null;
   }
 }
 
@@ -62,8 +73,10 @@ class MineableChain extends Blockchain {
    *   This will only be used internally.
    */
   constructor() {
-    // Your code here
-
+    super();
+    this.difficulty = 5;
+    this.reward = 10;
+    this.pendingTransactions = [];
   }
 
   /**
@@ -79,7 +92,7 @@ class MineableChain extends Blockchain {
    */
   addTransaction(transaction) {
     // Your code here
-
+    this.pendingTransactions.push(transaction);
   }
 
   /**
@@ -98,7 +111,36 @@ class MineableChain extends Blockchain {
    */
   mine(privateKey) {
     // Your code here
-
+    let rewardTransaction = new MineableTransaction(privateKey, null, this.reward);
+    this.addTransaction(rewardTransaction);
+    let previous = this.getHeadBlock().hash;
+    let minedBlock = new MineableBlock(this.pendingTransactions, previous);
+    let nonce = 0;
+    while(true){
+      minedBlock.calculateHash(nonce);
+      console.log(minedBlock.hash);
+      let valid = true;
+      for(let i = 0; i < this.difficulty; i++){
+        if(minedBlock.hash[i] !== '0'){
+          nonce++;
+          valid = false;
+        }
+      }
+      if(valid){
+        let isInUse = false;
+        for(let block of this.blocks){
+          if(block.hash === minedBlock.hash) {
+            isInUse = true;
+            break;
+          }
+        }
+        if(!isInUse){
+          this.blocks.push(minedBlock);
+          break;
+        }
+      }
+    }
+    this.pendingTransactions = [];
   }
 }
 
