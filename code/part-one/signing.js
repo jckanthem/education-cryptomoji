@@ -1,8 +1,7 @@
-'use strict';
+"use strict";
 
-const secp256k1 = require('secp256k1');
-const { randomBytes, createHash } = require('crypto');
-
+const secp256k1 = require("secp256k1");
+const { randomBytes, createHash } = require("crypto");
 
 /**
  * A function which generates a new random Secp256k1 private key, returning
@@ -15,7 +14,11 @@ const { randomBytes, createHash } = require('crypto');
  */
 const createPrivateKey = () => {
   // Enter your solution here
-
+  let privKey;
+  do {
+    privKey = randomBytes(32);
+  } while (!secp256k1.privateKeyVerify(privKey));
+  return privKey.toString("hex");
 };
 
 /**
@@ -33,7 +36,9 @@ const createPrivateKey = () => {
  */
 const getPublicKey = privateKey => {
   // Your code here
-
+  return secp256k1
+    .publicKeyCreate(Buffer.from(privateKey, "hex"))
+    .toString("hex");
 };
 
 /**
@@ -51,7 +56,12 @@ const getPublicKey = privateKey => {
  */
 const sign = (privateKey, message) => {
   // Your code here
-
+  console.log(message);
+  let sign = secp256k1
+    .sign(message, Buffer.from(privateKey, "hex"))
+    .toString("hex");
+  console.log(sign);
+  return sign;
 };
 
 /**
@@ -66,7 +76,6 @@ const sign = (privateKey, message) => {
  */
 const verify = (publicKey, message, signature) => {
   // Your code here
-
 };
 
 module.exports = {
