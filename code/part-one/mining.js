@@ -74,7 +74,7 @@ class MineableChain extends Blockchain {
    */
   constructor() {
     super();
-    this.difficulty = 5;
+    this.difficulty = 3;
     this.reward = 10;
     this.pendingTransactions = [];
   }
@@ -118,7 +118,7 @@ class MineableChain extends Blockchain {
     let nonce = 0;
     while(true){
       minedBlock.calculateHash(nonce);
-      console.log(minedBlock.hash);
+      // console.log(`\n ${nonce} ${minedBlock.hash}`);
       let valid = true;
       for(let i = 0; i < this.difficulty; i++){
         if(minedBlock.hash[i] !== '0'){
@@ -136,6 +136,7 @@ class MineableChain extends Blockchain {
         }
         if(!isInUse){
           this.blocks.push(minedBlock);
+          console.log(`\n ${nonce} ${minedBlock.hash}`);
           break;
         }
       }
@@ -161,7 +162,15 @@ class MineableChain extends Blockchain {
  */
 const isValidMineableChain = blockchain => {
   // Your code here
-
+  let blocks = blockchain.blocks;
+  for(let i = 1; i < blocks.length; i++){
+    for(let j = 0; j < difficulty; j++){
+      if(blocks[i].hash[j] !== '0'){
+        return false;
+      }
+    }
+    
+  }
 };
 
 module.exports = {
