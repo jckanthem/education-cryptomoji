@@ -146,7 +146,6 @@
 //       const recipient = signing.getPublicKey(signing.createPrivateKey());
 //       const transaction = new Transaction(signer, recipient, 100);
 //       blockchain.addBlock([transaction]);
-
 //       expect(blockchain.getBalance(recipient)).to.equal(100);
 //       expect(blockchain.getBalance(signing.getPublicKey(signer)))
 //         .to.equal(-100);

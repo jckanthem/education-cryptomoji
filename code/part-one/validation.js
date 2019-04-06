@@ -12,7 +12,11 @@ const signing = require('./signing');
  */
 const isValidTransaction = transaction => {
   // Enter your solution here
-
+  if(transaction.amount < 0){
+    return false;
+  }
+  let message = transaction.source + transaction.recipient + transaction.amount;
+  return signing.verify(transaction.source, message, transaction.signature);
 };
 
 /**
@@ -23,7 +27,13 @@ const isValidTransaction = transaction => {
  */
 const isValidBlock = block => {
   // Your code here
-
+  for(let transaction of block.transactions){
+    if(!isValidTransaction(transaction)){
+      return false;
+    }
+  }
+  let trueHash = createHash('sha512').update(block.transactions + block.previousHash + block.nonce).digest().toString('base64');
+  return trueHash === block.hash;
 };
 
 /**
@@ -38,7 +48,19 @@ const isValidBlock = block => {
  */
 const isValidChain = blockchain => {
   // Your code here
-
+  for(let i = 0; i < blockchain.blocks.length; i++){
+    if(blockchain.blocks[i].previousHash === null &&  i != 0){
+      return false;
+    }
+    if(blockchain.blocks[i + 1] !== undefined && blockchain.blocks[i + 1].previousHash !== blockchain.blocks[i].hash){
+      return false;
+    }
+    if(!isValidBlock(blockchain.blocks[i])){
+      return false;
+    }
+    
+  }
+  return blockchain.blocks[0].previousHash === null;
 };
 
 /**
@@ -48,7 +70,13 @@ const isValidChain = blockchain => {
  */
 const breakChain = blockchain => {
   // Your code here
-
+  let myWalletKey = signing.getPublicKey(signing.createPrivateKey());
+  for(let block of blockchain.blocks){
+    for(let tran of block.transactions){
+      tran.recipient = myWalletKey;
+      // set every transaction to be sent to my wallet huehuehue
+    }
+  }
 };
 
 module.exports = {
