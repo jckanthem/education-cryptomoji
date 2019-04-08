@@ -1,5 +1,5 @@
 'use strict';
-
+const stringify = require('json-stable-stringify');
 /**
  * A function that takes an object and returns it encoded as JSON Buffer.
  * Should work identically to the client version. Feel free to copy and paste
@@ -17,7 +17,8 @@
  */
 const encode = object => {
   // Enter your solution here
-
+  let json = stringify(object);
+  return Buffer.from(json);
 };
 
 /**
@@ -26,7 +27,7 @@ const encode = object => {
  */
 const decode = buffer => {
   // Your code here
-
+  return JSON.parse(buffer.toString())
 };
 
 module.exports = {

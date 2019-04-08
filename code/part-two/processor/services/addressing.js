@@ -25,7 +25,7 @@ const PREFIXES = {
  */
 const getCollectionAddress = publicKey => {
   // Enter your solution here
-
+  return NAMESPACE + PREFIXES.COLLECTION + createHash('sha512').update(publicKey).digest('hex').slice(0,62);
 };
 
 /**
@@ -34,7 +34,9 @@ const getCollectionAddress = publicKey => {
  */
 const getMojiAddress = (ownerKey, dna) => {
   // Your code here
-
+  const ownerHash = createHash('sha512').update(ownerKey).digest('hex').slice(0,8);
+  const dnaHash = createHash('sha512').update(dna).digest('hex').slice(0,54);
+  return NAMESPACE + PREFIXES.MOJI + ownerHash + dnaHash;
 };
 
 /**
@@ -43,7 +45,7 @@ const getMojiAddress = (ownerKey, dna) => {
  */
 const getSireAddress = ownerKey => {
   // Your code here
-
+  return NAMESPACE + PREFIXES.SIRE_LISTING + createHash('sha512').update(ownerKey).digest('hex').slice(0,62);
 };
 
 /**
@@ -76,7 +78,16 @@ const getOfferAddress = (ownerKey, addresses) => {
  */
 const isValidAddress = address => {
   // Your code here
-
+  if(typeof address !== 'string'){
+    return false;
+  } else if(address.length !== 70){
+    return false;
+  } else if(address.slice(0,6) !== NAMESPACE){
+    return false;
+  } else if(!address.match(/[0-9a-fA-F]{70}/)){
+    return false
+  }
+  return true;
 };
 
 module.exports = {

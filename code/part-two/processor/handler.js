@@ -49,7 +49,34 @@ class MojiHandler extends TransactionHandler {
   apply (txn, context) {
     // Enter your solution here
     // (start by decoding your payload and checking which action it has)
+    let payload;
+    try{
+      payload = decode(txn.payload);
+    } catch(err) {
+      throw new InvalidTransaction('Poorly Encoded Payload');
+    }
+    switch(payload.action){
+      case 'CREATE_COLLECTION':{
+        console.log(txn.header);
+        const owner = txn.header.signerPublicKey;
+        return context.getState([owner]).then(state => {
+          if(state[owner].length !== 0){
+            throw new InvalidTransaction('Owner exists');
+          } else {
+            
+          }
+        })
+      }
+      case 'SELECT_SIRE': {
 
+      }
+      case 'BREED_MOJI': {
+
+      }
+      default: {
+        throw new InvalidTransaction('Invalid Action');
+      }
+    }
   }
 }
 
