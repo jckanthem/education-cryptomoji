@@ -1,11 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-
-
+import AppRouter from './components/AppRouter.jsx'
+import { parseDna } from './services/parse_dna'
 ReactDOM.render((
-  <BrowserRouter>
-    <h1>Hello, Cryptomoji!</h1>
-  </BrowserRouter>
+  <AppRouter />
 ), document.getElementById('app'));
 
+window.parseDna = parseDna;

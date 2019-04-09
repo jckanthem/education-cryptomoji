@@ -9,7 +9,6 @@ import { createHash } from 'crypto';
 import { getPublicKey, sign } from './signing.js';
 import { encode } from './encoding.js';
 
-
 const FAMILY_NAME = 'cryptomoji';
 const FAMILY_VERSION = '0.1';
 const NAMESPACE = '5f4d76';
@@ -29,7 +28,24 @@ const NAMESPACE = '5f4d76';
  */
 export const createTransaction = (privateKey, payload) => {
   // Enter your solution here
-
+    const header = {  
+      familyName: FAMILY_NAME,
+      familyVersion: FAMILY_VERSION,
+      inputs: [NAMESPACE],
+      outputs: [NAMESPACE],
+      signerPublicKey: getPublicKey(privateKey),
+      batcherPublicKey: getPublicKey(privateKey),
+      dependencies: [],
+      nonce: String(Math.floor(Math.random()* 5000)),
+      payloadSha512: createHash('sha512').update(encode(payload)).digest('hex')
+    }
+    let headerBytes = TransactionHeader.encode(header).finish();
+    const transactionObject = {
+      header: headerBytes,
+      headerSignature: sign(privateKey, headerBytes),
+      payload: encode(payload)
+    }
+    return Transaction.create(transactionObject);
 };
 
 /**
@@ -41,7 +57,20 @@ export const createTransaction = (privateKey, payload) => {
  */
 export const createBatch = (privateKey, transactions) => {
   // Your code here
-
+  if(!Array.isArray(transactions)){
+    transactions = [transactions];
+  }
+  const header = {
+    signerPublicKey: getPublicKey(privateKey),
+    transactionIds: transactions.map(txn => txn.headerSignature)
+  }
+  const batchHeaderBytes = BatchHeader.encode(header).finish();
+  const batchObject = {
+    header: batchHeaderBytes,
+    headerSignature: sign(privateKey, batchHeaderBytes),
+    transactions
+  }
+  return Batch.create(batchObject);
 };
 
 /**
@@ -74,5 +103,8 @@ export const encodeBatches = batches => {
  */
 export const encodeAll = (privateKey, payloads) => {
   // Your code here
-
+  if(!Array.isArray(payloads)){
+    payloads = [payloads];
+  }
+  return encodeBatches(createBatch(privateKey, payloads.map(payload => createTransaction(privateKey, payload))))
 };

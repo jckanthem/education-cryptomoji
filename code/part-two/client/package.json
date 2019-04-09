@@ -22,13 +22,14 @@
   "homepage": "https://github.com/hyperledger/education-cryptomoji#readme",
   "dependencies": {
     "axios": "^0.18.0",
-    "babel-core": "^6.26.0",
+    "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.6.1",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "bootstrap": "^4.1.1",
-    "css-loader": "^0.28.11",
+    "css-loader": "^2.1.1",
     "jquery": "^3.3.1",
+    "json-stable-stringify": "^1.0.1",
     "popper.js": "^1.14.3",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
@@ -36,12 +37,12 @@
     "sawtooth-sdk": "^1.0.2",
     "secp256k1": "^3.5.0",
     "style-loader": "^0.21.0",
-    "webpack": "^4.2.0",
+    "webpack": "^4.29.6",
     "webpack-cli": "^2.0.13"
   },
   "devDependencies": {
     "chai": "^4.1.2",
-    "live-server": "^1.2.0",
+    "live-server": "^1.2.1",
     "mocha": "^5.1.1"
   }
 }

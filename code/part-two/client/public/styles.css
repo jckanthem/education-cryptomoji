@@ -1,0 +1,10 @@
+#navBar {
+  display: flex;
+  flex-direction: row;
+}
+.redirectLink {
+  margin: 5px;
+  background-color: black;
+  color: white;
+  font-size: 20px;
+}

@@ -47,7 +47,6 @@ describe('Transactions module', function() {
     it('should include TransactionHeader with correct properties', function() {
       expect(() => TransactionHeader.decode(transaction.header)).to.not.throw();
       const header = TransactionHeader.decode(transaction.header);
-
       expect(header.signerPublicKey)
         .to.be.set
         .and.be.a.hexString
