@@ -1,7 +1,7 @@
 export const fetchState = address => {
   return fetch(`/api/state/${address}`)
-    .then(data => data.arrayBuffer())
-    .then(buffer => String.fromCharCode.apply(null, new Uint8Array(buffer)));
+    .then(data => data.json())
+    .catch(err => err);
   //)
 };
 export const fetchStatePartial = partialAddress => {

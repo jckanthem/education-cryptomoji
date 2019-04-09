@@ -12,7 +12,8 @@ import {
   getMojiAddress,
   getSireAddress
 } from "../services/addressing";
-
+import { encode } from "punycode";
+//USE LOCALHOST 3000 WITH DOCKER-COMPOSE UP RUNNING
 class AppRouter extends React.Component {
   constructor(props) {
     super();
@@ -26,10 +27,16 @@ class AppRouter extends React.Component {
     console.log(privateKey);
     let keys = createKeys();
     privateKey = keys.privateKey;
-    console.log(privateKey);
     let publicKey = getPublicKey(privateKey);
     let collectionAddress = getCollectionAddress(publicKey);
-    fetchState(collectionAddress).then(data => console.log(data));
+    fetchState(collectionAddress).then(data => {
+      if (data.error) {
+        alert("Invalid private key, please register");
+      }
+    });
+    // .catch(err => {
+    //
+    // });
   }
   updatePage(page) {
     this.setState({ page });
