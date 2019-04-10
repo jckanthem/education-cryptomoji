@@ -19,24 +19,28 @@ class AppRouter extends React.Component {
     super();
     this.state = {
       user: null, //private key
-      page: "home"
+      page: "home",
+      userData: null
     };
     this.updatePage = this.updatePage.bind(this);
   }
-  handleSubmit(privateKey) {
-    console.log(privateKey);
-    let keys = createKeys();
-    privateKey = keys.privateKey;
+  handleLogIn(privateKey) {
     let publicKey = getPublicKey(privateKey);
     let collectionAddress = getCollectionAddress(publicKey);
     fetchState(collectionAddress).then(data => {
       if (data.error) {
         alert("Invalid private key, please register");
+      } else {
+        console.log(data);
+        this.setState({ page: "profile", user: privateKey, userData: data });
       }
     });
-    // .catch(err => {
-    //
-    // });
+  }
+  createAccount(privateKey) {
+    let batch = encodeAll(privateKey, { action: "CREATE_COLLECTION" });
+    console.log(batch);
+    sendBatch(batch).then(data => console.log(data));
+    // .then(data => console.log(data));
   }
   updatePage(page) {
     this.setState({ page });
@@ -49,10 +53,16 @@ class AppRouter extends React.Component {
       case "profile": {
       }
       case "signIn": {
-        return <SignIn handleSubmit={this.handleSubmit.bind(this)} />;
+        return (
+          <SignIn
+            handleLogIn={this.handleLogIn.bind(this)}
+            createAccount={this.createAccount.bind(this)}
+          />
+        );
       }
     }
   }
+
   render() {
     return (
       <div>

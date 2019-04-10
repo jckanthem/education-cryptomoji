@@ -6,15 +6,13 @@ import {
 } from "../services/apiRoutes.js";
 import { encodeAll } from "../services/transactions.js";
 import { createKeys } from "../services/signing.js";
-
 class SignIn extends React.Component {
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
       privateKey: ""
     };
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit;
   }
   handleChange(e) {
     e.persist();
@@ -24,13 +22,29 @@ class SignIn extends React.Component {
     return (
       <div id="signin">
         <h2> Sign In </h2>
-        <span>Enter Private Key</span>
-        <input onChange={this.handleChange} />
+        <input placeholder="Enter Private Key" onChange={this.handleChange} />
         <button
           type="button"
-          onClick={() => this.props.handleSubmit(this.state.privateKey)}
+          onClick={() => this.props.handleLogIn(this.state.privateKey)}
         >
           Log in
+        </button>
+        <h3> Create Account </h3>
+        <input
+          type="text"
+          placeholder="New Private Key"
+          value={this.state.privateKey}
+        />
+        <button
+          type="button"
+          onClick={() => {
+            const { privateKey, publicKey } = createKeys();
+            this.setState({ privateKey });
+            this.props.createAccount(privateKey);
+            alert("Save the key in the field, it is your only way to sign in");
+          }}
+        >
+          Generate New Private Key
         </button>
       </div>
     );
