@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/hyperledger/education-cryptomoji#readme",
   "dependencies": {
+    "clipboard": "^2.0.4",
+    "react-clipboard.js": "^2.0.7",
     "secp256k1": "^3.5.0"
   },
   "devDependencies": {
